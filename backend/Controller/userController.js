@@ -21,17 +21,16 @@ exports.signUp = catchAsyncError(async (req, res, next) => {
 
 exports.isLoggedIn = catchAsyncError(async (req, res, next) => {
   const token = req.cookies.token;
-  if (token === "j:null") {
-    return next(new ErrorHandler(401, "Login Required"));
+  if (!token || token === "j:null") {
+    return next(new ErrorHandler(200, "Login Required"));
   }
-
   const userInfo = decryptToken(token);
 
   const user = await User.findById(userInfo.id);
   const expDate = new Date(userInfo.exp * 1000);
 
   if (!user || Date.now() > expDate) {
-    return next(new ErrorHandler(401, "Login Required"));
+    return next(new ErrorHandler(200, "Login Required"));
   }
   return res.status(200).json({
     success: true,
@@ -42,17 +41,20 @@ exports.isLoggedIn = catchAsyncError(async (req, res, next) => {
 
 exports.login = catchAsyncError(async (req, res, next) => {
   const { username, password } = req.body;
+  console.log("FROM HERE", username, password);
   if (!username || !password) {
     console.log("in this methos");
-    return next(new ErrorHandler(401, "Enter username or password"));
+    return next(new ErrorHandler(200, "Enter username or password"));
   }
   const user = await User.findOne({ username: req.body.username });
+  console.log("is user present", !user);
   if (!user) {
-    return next(new ErrorHandler(401, "username or password is wrong"));
+    return next(new ErrorHandler(200, "username or password is wrong"));
   }
+  console.log("User Present");
   const isPasswordMatched = await user.comparePassword(password);
   if (!isPasswordMatched) {
-    return next(new ErrorHandler(401, "username or password is wrong"));
+    return next(new ErrorHandler(200, "username or password is wrong"));
   } else {
     sendToken(user, 201, res);
   }

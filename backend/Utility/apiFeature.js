@@ -24,7 +24,7 @@ class ApiFeature {
     //date filter
     if (queryCopy.date) {
       console.log("in the loop", queryCopy.date);
-      const targetDate = new Date(Number(queryCopy.date));
+      const targetDate = new Date(queryCopy.date);
       console.log("target date", targetDate);
       const startDate = new Date(targetDate);
       startDate.setHours(0, 0, 0, 0);
