@@ -4,13 +4,16 @@ const { generatehtml } = require("./generateHtml");
 
 const generatePdf = async (bill, user) => {
   // Create a browser instance
+  console.log("first log");
   const browser = await puppeteer.launch({ headless: "new" });
 
   // Create a new page
+  console.log("second log");
   const page = await browser.newPage();
-
+  console.log("third log");
   //Get HTML content from HTML file
   const path = require("path");
+  console.log("fourth log", path);
   //   console.log(__dirname)
   // const htmlPath = path.join(__dirname, 'sample.html');
   // console.log(htmlPath)
