@@ -5,7 +5,7 @@ const path = require("path");
 exports.generatehtml = (bill, user) => {
   console.log("user Details", user);
   let total = 0;
-  let imagePath = path.join(__dirname, "public/images/logo11C.png");
+  let imagePath = path.join(__dirname, "images/logo11C.png");
   console.log("image path", imagePath);
   let tableRows = "";
   bill.items.map((data) => {
