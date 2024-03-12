@@ -5,7 +5,9 @@ const { generatehtml } = require("./generateHtml");
 const generatePdf = async (bill, user) => {
   // Create a browser instance
   console.log("first log");
-  const browser = await puppeteer.launch({ headless: "new" });
+  const browser = await puppeteer.launch({
+    headless: "true",
+  });
 
   // Create a new page
   console.log("second log");
