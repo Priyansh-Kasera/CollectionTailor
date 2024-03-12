@@ -1,9 +1,12 @@
 const fs = require("fs");
 const getDatefromUTC = require("./timeUtility");
+const path = require("path");
 
 exports.generatehtml = (bill, user) => {
   console.log("user Details", user);
   let total = 0;
+  let imagePath = path.join(__dirname, "public/images/logo11C.png");
+  console.log("image path", imagePath);
   let tableRows = "";
   bill.items.map((data) => {
     total += data.price * data.quantity;
@@ -126,7 +129,7 @@ exports.generatehtml = (bill, user) => {
     <body>
         <div class="header">
         <img src="data:image/png;base64,${fs
-          .readFileSync("D:/BillGenerator/backend/Utility/Images/logo11C.png")
+          .readFileSync(imagePath)
           .toString("base64")}" alt="alt text" width="300" class="logo" />
             <h1 class="headerText">INVOICE</h1>
         </div>
