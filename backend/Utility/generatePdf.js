@@ -5,6 +5,17 @@ const { generatehtml } = require("./generateHtml");
 const generatePdf = async (bill, user) => {
   // Create a browser instance
   console.log("first log");
+  puppeteer
+    .launch({
+      headless: "new",
+    })
+    .then((res) => {
+      console.log("Result", res);
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+  console.log("After then");
   const browser = await puppeteer.launch({
     headless: "true",
   });
