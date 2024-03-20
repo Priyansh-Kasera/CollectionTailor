@@ -73,7 +73,8 @@ exports.updateParty = catchAsyncError(async (req, res, next) => {
 });
 
 exports.deleteParty = catchAsyncError(async (req, res, next) => {
-  const id = req.params.id;
+  const id = req.body.id;
+  console.log("ID", req.body);
   const party = await Party.findByIdAndDelete(id);
   if (!party) {
     return next(new ErrorHandler(401, "Party not found"));
@@ -128,6 +129,7 @@ exports.getPartyLedger = catchAsyncError(async (req, res, next) => {
 });
 
 exports.downloadLedgerPdf = catchAsyncError(async (req, res, next) => {
+  console.log(req.body);
   const { bills, startDate, endDate, partyId } = req.body;
   const token = req.cookies.token;
 
@@ -140,6 +142,7 @@ exports.downloadLedgerPdf = catchAsyncError(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler(401, "User not found"));
   }
+  console.log("Party id", partyId);
   const party = await Party.findById({ _id: partyId });
   console.log(!party, "partyFound");
   if (!party) {

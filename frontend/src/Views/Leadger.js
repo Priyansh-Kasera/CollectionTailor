@@ -31,7 +31,6 @@ const Leadger = () => {
   }, []);
 
   useEffect(() => {
-    console.log("in this");
     if (partyData) {
       const data = {
         startDate,
@@ -78,7 +77,6 @@ const Leadger = () => {
     createLeadgerPdf("/party/ledgerPdf", "POST", data, generatePdfCB);
   };
   const generatePdfCB = (res) => {
-    console.log(res, "result");
     const url = URL.createObjectURL(res);
     const aElement = document.createElement("a");
     aElement.href = url;
@@ -140,7 +138,7 @@ const Leadger = () => {
                         tran.payment ? "text-green-500" : "text-red-500"
                       )}
                     >
-                      Amount: {tran.amount} {tran.payment ? "DR" : "CR"}
+                      Amount: {tran.amount} {tran.payment ? "CR" : "DR"}
                     </h1>
 
                     <h1

@@ -13,7 +13,7 @@ const {
 const router = express.Router();
 
 router.route("/:id").put(updateParty);
-router.route("/:id").delete(deleteParty);
+router.route("/delete").post(deleteParty);
 router.route("/:id").get(findById);
 router.route("/").get(getParties);
 router.route("/").post(addParty);

@@ -1,11 +1,15 @@
 import { COLORS } from "../assets/colors";
 import { Link, NavLink } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa";
-import { IoMdLogOut } from "react-icons/io";
+import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { IoMdMenu } from "react-icons/io";
 import SideNav from "./SideNav";
 import { useState } from "react";
+import logo from "../Images/logo3.png";
+import { makeRequest } from "../service/apiconfig";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const Header = () => {
   const options = [
@@ -15,10 +19,37 @@ const Header = () => {
     { name: "Payment", route: "/payment" },
   ];
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB);
+  }, []);
+
+  const isUserLoggedInCB = (result) => {
+    if (result?.success) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
   const [showSideNav, setShowSideNav] = useState(false);
 
   const showHideSideNave = () => {
     setShowSideNav(!showSideNav);
+  };
+
+  const handleLogout = () => {
+    makeRequest("/logout", "GET", null, logOutCB);
+  };
+
+  const logOutCB = (res) => {
+    if (res.success) {
+      toast.success("Logout successfully.");
+      setIsLoggedIn(false);
+    } else {
+      toast.error(res.message);
+    }
   };
   return (
     <div
@@ -32,9 +63,16 @@ const Header = () => {
               menu={options}
               showSideNav={showSideNav}
               setShowSideNav={setShowSideNav}
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              handleLogout={handleLogout}
             />
           </div>
-          <div>
+          <div className="flex flex-row gap-5 items-center">
+            <img
+              src={logo}
+              className="w-1/10 aspect-auto object-contain object-center"
+            />
             <h1
               style={{ color: COLORS.darkText }}
               className="font-bold text-lg md:text-2xl"
@@ -60,8 +98,20 @@ const Header = () => {
             ))}
           </div>
           <div className="hidden lg:flex flex-row items-center gap-8  md:gap-12">
-            <FaRegUser size={22} color={COLORS.darkText} />
-            <IoMdLogOut size={22} color={COLORS.darkText} />
+            <Link to="/user">
+              <FaRegUser size={22} color={COLORS.darkText} />
+            </Link>
+            {isLoggedIn ? (
+              <IoMdLogOut
+                size={22}
+                color={COLORS.darkText}
+                onClick={handleLogout}
+              />
+            ) : (
+              <Link to="/sign-in">
+                <IoMdLogIn size={22} color={COLORS.darkText} />
+              </Link>
+            )}
           </div>
         </div>
       </MaxWidthWrapper>

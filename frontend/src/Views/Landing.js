@@ -7,23 +7,27 @@ import Loader from "../Components/Loader";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import MaxWidthWrapper from "../Components/MaxWidthWrapper";
-import { FaLeaf } from "react-icons/fa";
+import { BiLeaf } from "react-icons/bi";
+import { LuArrowDownToLine } from "react-icons/lu";
+import { FiCheckCircle } from "react-icons/fi";
+
 const Landing = () => {
   const perks = [
     {
       name: "Instant Delivery",
-      icon: "",
-      description: "Get your cloths deliver to your address within one week.",
+      icon: LuArrowDownToLine,
+      description:
+        "Receive your clothing delivery directly to your doorstep within the span of just one week.",
     },
     {
       name: "Guaranteed Quality",
-      icon: "",
+      icon: FiCheckCircle,
       description:
         "Every material in our platform is varified by our team to ensure highest quality and standards. Not happy? We offer a 30-day refuned guarantee.",
     },
     {
       name: "For the Planet",
-      icon: "",
+      icon: BiLeaf,
       description:
         "We've pledged 1% of sales to the preservation and restoration of the natural environment.",
     },
@@ -42,7 +46,7 @@ const Landing = () => {
             style={{ backgroundColor: COLORS.imageBG }}
           >
             <MaxWidthWrapper className="h-full">
-              <div className="flex flex-col lg:flex-row gap-5 w-full relative h-full">
+              <div className="flex flex-col lg:flex-row gap-5 w-full relative h-full pb-10 lg:pb-0">
                 <div className="w-full lg:w-3/5 h-full">
                   <img
                     src={landingImage}
@@ -84,7 +88,7 @@ const Landing = () => {
           </div>
           <div>
             <MaxWidthWrapper className="py-20">
-              <div className="grid grid-cols-1 grid-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
+              <div className="grid grid-cols-1 grid-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8 gap-y-8 lg:gap-y-0">
                 {perks.map((perk) => (
                   <div
                     key={perk.name}
@@ -98,7 +102,7 @@ const Landing = () => {
                           color: COLORS.background,
                         }}
                       >
-                        <FaLeaf className="w-1/3 h-1/3" />
+                        <perk.icon className="w-1/3 h-1/3" />
                       </div>
                     </div>
                     <div className="mt-6 md:ml-4 md:mt-0 lg:mt-6 lg:ml-0">

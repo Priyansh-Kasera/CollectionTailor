@@ -19,7 +19,6 @@ const Layout = ({ children, check = true }) => {
 
   const isUserLoggedInCB = (result) => {
     if (!result?.success) {
-      toast.error("You are not LOGIN please login.");
       navigate("/sign-in");
     }
   };

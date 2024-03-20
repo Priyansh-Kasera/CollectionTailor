@@ -4,6 +4,7 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
+import logo from "../Images/logo3.png";
 
 const Footer = () => {
   const options = [
@@ -16,7 +17,11 @@ const Footer = () => {
     <MaxWidthWrapper>
       <div className="w-full relative flex flex-col gap-4 py-10 ">
         <div className="flex flex-row justify-between flex-wrap gap-y-4">
-          <div>
+          <div className="flex flex-row items-center gap-5">
+            <img
+              src={logo}
+              className="w-1/20 aspect-auto object-contain object-center"
+            />
             <h1
               style={{ color: COLORS.darkText }}
               className="font-bold text-base md:text-xl"

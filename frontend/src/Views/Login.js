@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { makeRequest } from "../service/apiconfig";
 import Layout from "./Layout";
 import Heading from "../Components/Heading";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const form = useForm();
@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   return (
-    <Layout check={false}>
+    <Layout>
       <div className="relative w-full flex flex-col items-center">
         <form className="w-full md:w-1/2 flex flex-col gap-12 md:gap-18 mt-10 md:mt-20">
           <Heading title={"Welcome back!"} />
@@ -63,6 +63,11 @@ const Login = () => {
               },
             })}
           />
+          <Link to="/user/password/forgot" className="ml-auto">
+            <p className="text-base ml-auto transition-all hover:font-bold border-slate cursor-pointer font-medium text-slate">
+              Forgot Password
+            </p>
+          </Link>
           <AppButton
             label="Login"
             onPress={handleSubmit(onSumbmit)}

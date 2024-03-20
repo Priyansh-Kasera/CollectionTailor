@@ -128,6 +128,9 @@ exports.generatehtml = (bill, user) => {
     </head>
     <body>
         <div class="header">
+        <img src="data:image/png;base64,${fs
+          .readFileSync(imagePath)
+          .toString("base64")}" alt="alt text" width="300" class="logo" />
             <h1 class="headerText">INVOICE</h1>
         </div>
         <div class="customerDetails">

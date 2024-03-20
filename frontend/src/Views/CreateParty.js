@@ -7,6 +7,7 @@ import { makeRequest } from "../service/apiconfig";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Heading from "../Components/Heading";
+import { toast } from "react-toastify";
 
 const CreateParty = () => {
   const form = useForm({
@@ -40,12 +41,17 @@ const CreateParty = () => {
   }, []);
 
   const getPartyDataCB = (res) => {
-    console.log(res);
     setValue("partyName", res?.data?.partyName || "");
     setValue("mobileNumber", res?.data?.mobileNo || "");
     setValue("openingAmount", res?.data?.amount);
   };
-  const createPartyCB = (res) => {};
+  const createPartyCB = (res) => {
+    if (res.success) {
+      toast.success(`Party ${id ? "updated" : "created"} successfully.`);
+    } else {
+      toast.error(res.message);
+    }
+  };
   return (
     <Layout>
       <div className="relative w-full flex flex-col items-center">

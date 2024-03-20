@@ -24,12 +24,12 @@ export const makeRequest = (
     },
   })
     .then((res) => {
-      console.log("RESPNOSE>>>>>>>>", res.data);
+      //console.log("RESPNOSE>>>>>>>>", res.data);
       callBack(res.data);
     })
     .catch((err) => {
-      console.log(err);
-      toast.error(err.message || "Something wrong happened.");
+      //console.log(err);
+      toast.error(err?.response?.data?.message || "Something wrong happened.");
     })
     .finally(() => {
       stopLoader();
@@ -49,11 +49,11 @@ export const createPdfRequest = (url, type = "POST", data, callBack) => {
     },
   })
     .then((res) => {
-      console.log("RESPNOSE>>>>>>>>", res.data);
+      //console.log("RESPNOSE>>>>>>>>", res.data);
       callBack(res.data);
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       toast.error("Something wrong happened.");
     })
     .finally(() => {
@@ -74,11 +74,11 @@ export const createLeadgerPdf = (url, type = "POST", data, callBack) => {
     },
   })
     .then((res) => {
-      console.log("RESPNOSE>>>>>>>>", res.data);
+      //console.log("RESPNOSE>>>>>>>>", res.data);
       callBack(res.data);
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       toast.error("Something wrong happened.");
     })
     .finally(() => {

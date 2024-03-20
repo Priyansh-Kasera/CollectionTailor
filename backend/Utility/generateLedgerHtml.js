@@ -144,9 +144,6 @@ align-items: end;
 </head>
 <body>
   <div class="header">
-  <img src="data:image/png;base64,${fs
-    .readFileSync("D:/BillGenerator/backend/Utility/Images/logo11C.png")
-    .toString("base64")}" alt="alt text" width="300" class="logo" />
       <h1 class="headerText">LEDGER</h1>
   </div>
 

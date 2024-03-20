@@ -24,6 +24,7 @@ exports.isLoggedIn = catchAsyncError(async (req, res, next) => {
   if (!token || token === "j:null") {
     return next(new ErrorHandler(200, "Login Required"));
   }
+  console.log("TOKEN", token);
   const userInfo = decryptToken(token);
 
   const user = await User.findById(userInfo.id);
@@ -41,27 +42,24 @@ exports.isLoggedIn = catchAsyncError(async (req, res, next) => {
 
 exports.login = catchAsyncError(async (req, res, next) => {
   const { username, password } = req.body;
-  console.log("FROM HERE", username, password);
   if (!username || !password) {
     console.log("in this methos");
-    return next(new ErrorHandler(200, "Enter username or password"));
+    return next(new ErrorHandler(401, "Enter username or password"));
   }
   const user = await User.findOne({ username: req.body.username });
-  console.log("is user present", !user);
   if (!user) {
-    return next(new ErrorHandler(200, "username or password is wrong"));
+    return next(new ErrorHandler(201, "username or password is wrong"));
   }
-  console.log("User Present");
   const isPasswordMatched = await user.comparePassword(password);
   if (!isPasswordMatched) {
-    return next(new ErrorHandler(200, "username or password is wrong"));
+    return next(new ErrorHandler(201, "username or password is wrong"));
   } else {
     sendToken(user, 201, res);
   }
 });
 
 exports.updateUser = catchAsyncError(async (req, res, next) => {
-  const user = await User.findById({ _id: req.body.id });
+  const user = await User.findById({ _id: req.body._id });
 
   if (!user) {
     return res.status(404).json({
@@ -70,7 +68,7 @@ exports.updateUser = catchAsyncError(async (req, res, next) => {
     });
   }
   const userUpdated = await User.findByIdAndUpdate(
-    { _id: req.body.id },
+    { _id: req.body._id },
     req.body,
     {
       new: true,
@@ -94,28 +92,37 @@ exports.logout = catchAsyncError(async (req, res, next) => {
 });
 
 exports.getUserDetails = catchAsyncError(async (req, res, next) => {
-  const id = req.params.id;
-  const user = await User.findById(id);
+  const token = req.cookies.token;
+  if (!token || token === "j:null") {
+    return next(new ErrorHandler(200, "Login Required"));
+  }
+  console.log("TOKEN", token);
+  const userInfo = decryptToken(token);
+
+  const user = await User.findById(userInfo.id);
+
   if (!user) {
-    return next(new ErrorHandler(400, "user not found"));
+    return next(new ErrorHandler(200, "User Data not found"));
   }
   return res.status(200).json({
     success: true,
+    id: userInfo.id,
     user: user,
   });
 });
 
 exports.forgotPassword = catchAsyncError(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email });
-
+  const user = await User.findOne({
+    email: { $regex: new RegExp(req.body.email, "i") },
+  });
   if (!user) {
-    return next(new ErrorHandler(404, "user not found"));
+    return next(new ErrorHandler(202, "user not found"));
   }
   const resetToken = await user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
-  const resetPasswordUrl = `${req.protocol}://${res.get(
+  const resetPasswordUrl = `${req.protocol}://${req.get(
     "host"
-  )}/reset/${resetToken}`;
+  )}/password/reset/${resetToken}`;
   const message = `Your password reset token is ;- \n \n ${resetPasswordUrl} \n \n if you have not requested this email then,
     please ignore it `;
 
@@ -147,7 +154,7 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
     resetPasswordExpire: { $gt: Date.now() },
   });
   if (!user) {
-    return next(new ErrorHandler(201, "User Not found to reset Password"));
+    return next(new ErrorHandler(201, "Token expired."));
   }
 
   if (req.body.password !== req.body.confirmPassword) {

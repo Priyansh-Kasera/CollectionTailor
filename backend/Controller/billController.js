@@ -74,11 +74,12 @@ exports.findBill = catchAsyncError(async (req, res, next) => {
 });
 
 exports.deleteBill = catchAsyncError(async (req, res, next) => {
-  const bill = await Bill.findById(req.params.id);
+  console.log("id", req.body.id);
+  const bill = await Bill.findById(req.body.id);
   if (!bill) {
     return next(new ErrorHandler(404, "bill not found"));
   }
-  await Bill.findByIdAndDelete(req.params.id);
+  await Bill.findByIdAndDelete(req.body.id);
   return res.status(200).json({
     success: true,
     message: "bill deleted successfully",
@@ -178,7 +179,7 @@ exports.chageBillStatus = catchAsyncError(async (req, res, next) => {
 exports.createPdf = catchAsyncError(async (req, res, next) => {
   const token = req.cookies.token;
 
-  if (token === "j:null") {
+  if (!token || token === "j:null") {
     return next(new ErrorHandler(401, "Login Required"));
   }
 

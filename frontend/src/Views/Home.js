@@ -9,6 +9,10 @@ import BillDetails from "./BillDetails";
 import Bills from "./Bills";
 import Leadger from "./Leadger";
 import PageNotFound from "./PageNotFound";
+import Profile from "./Profile";
+import ChangePassword from "./ChangePassword";
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
 
 const Home = () => {
   return (
@@ -25,6 +29,10 @@ const Home = () => {
         <Route path="/bill/:id" element={<BillDetails />} />
         <Route path="/bill" element={<Bills />} />
         <Route path="/ledger" element={<Leadger />} />
+        <Route path="/user" element={<Profile />} />
+        <Route path="/user/password/:id" element={<ChangePassword />} />
+        <Route path="/user/password/forgot" element={<ForgotPassword />} />
+        <Route path="/password/reset/:token" element={<ResetPassword />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>

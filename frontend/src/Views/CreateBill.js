@@ -54,7 +54,6 @@ const CreateBill = () => {
         address: bill.address,
         products: bill.items,
       });
-      console.log(defaultValues.current);
     } else {
       toast.error("Oops! something wrong happend.");
     }

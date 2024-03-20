@@ -1,12 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { MdCancel } from "react-icons/md";
 import { COLORS } from "../assets/colors";
 import { cn } from "../Utility/helper";
-import { IoMdMenu } from "react-icons/io";
+import { IoMdLogIn, IoMdLogOut, IoMdMenu } from "react-icons/io";
+import { FaRegUser } from "react-icons/fa";
 
-const SideNav = ({ menu, showSideNav, setShowSideNav }) => {
+const SideNav = ({
+  menu,
+  showSideNav,
+  setShowSideNav,
+  isLoggedIn,
+  handleLogout,
+}) => {
   const showHideSideNave = () => {
     setShowSideNav(!showSideNav);
+  };
+  const logout = () => {
+    setShowSideNav(false);
+    handleLogout();
   };
   return (
     <>
@@ -18,18 +29,25 @@ const SideNav = ({ menu, showSideNav, setShowSideNav }) => {
         )}
         style={{ backgroundColor: COLORS.imageBG }}
       >
-        <MdCancel
-          onClick={showHideSideNave}
-          size={28}
-          color={COLORS.slate}
-          className="absolute top-0 right-0 m-4 focus:outline-none"
-        />
+        <div className="absolute top-0 w-full items-center p-4 flex flex-row justify-between">
+          <p className="font-bold text-lg md:text-2xl">Collection Tailor</p>
+          <MdCancel
+            onClick={showHideSideNave}
+            size={28}
+            color={COLORS.slate}
+            className=" focus:outline-none"
+          />
+        </div>
 
         <br />
         <div className="w-full flex flex-col mt-10">
-          {menu.map((item) => (
-            <Link to={item.route} className="w-full">
-              <div className="p-2 mx-2 border-b border-gray-700">
+          {menu.map((item, index) => (
+            <NavLink
+              to={item.route}
+              key={index}
+              className={({ isActive }) => (isActive ? "bg-slate500" : "")}
+            >
+              <div className="p-2 mx-2 border-gray-700">
                 <h1
                   className="text-lg font-medium capitalize"
                   style={{ color: COLORS.darkText }}
@@ -37,8 +55,48 @@ const SideNav = ({ menu, showSideNav, setShowSideNav }) => {
                   {item.name}
                 </h1>
               </div>
-            </Link>
+            </NavLink>
           ))}
+        </div>
+
+        <div className="w-full flex flex-col absolute bottom-10">
+          <Link to="/user">
+            <div className="p-2 mx-2 flex flex-row gap-4 items-center border-gray-700">
+              <FaRegUser size={20} color={COLORS.darkText} />
+              <h1
+                className="text-lg font-medium capitalize"
+                style={{ color: COLORS.darkText }}
+              >
+                Profile
+              </h1>
+            </div>
+          </Link>
+          {isLoggedIn ? (
+            <div
+              className="p-2 mx-2 flex flex-row items-center gap-4 border-gray-700"
+              onClick={logout}
+            >
+              <IoMdLogOut size={22} color={COLORS.darkText} />
+              <h1
+                className="text-lg font-medium capitalize"
+                style={{ color: COLORS.darkText }}
+              >
+                Log Out
+              </h1>
+            </div>
+          ) : (
+            <Link to="/sign-in">
+              <div className="p-2 mx-2 flex flex-row items-center gap-4 border-gray-700">
+                <IoMdLogIn size={22} color={COLORS.darkText} />
+                <h1
+                  className="text-lg font-medium capitalize"
+                  style={{ color: COLORS.darkText }}
+                >
+                  Log In
+                </h1>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </>
