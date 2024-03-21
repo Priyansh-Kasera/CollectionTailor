@@ -22,7 +22,7 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB);
+    makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB, true);
   }, []);
 
   const isUserLoggedInCB = (result) => {
