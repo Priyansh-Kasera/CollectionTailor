@@ -1,5 +1,5 @@
 import { COLORS } from "../assets/colors";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import MaxWidthWrapper from "./MaxWidthWrapper";
@@ -20,6 +20,7 @@ const Header = () => {
   ];
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB, true);
@@ -46,6 +47,7 @@ const Header = () => {
   const logOutCB = (res) => {
     if (res.success) {
       toast.success("Logout successfully.");
+      navigate("/");
       setIsLoggedIn(false);
     } else {
       toast.error(res.message);

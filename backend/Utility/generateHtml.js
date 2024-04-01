@@ -5,7 +5,9 @@ const path = require("path");
 exports.generatehtml = (bill, user) => {
   console.log("user Details", user);
   let total = 0;
-  let imagePath = path.join(__dirname, "images/logo11C.png");
+  let imagePath = path.join(__dirname, "Images/logo11C.png");
+  //   let imagePath =
+  //     "https://collectiontailor.s3.ap-south-1.amazonaws.com/logo11C.png?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEBkaCmFwLXNvdXRoLTEiRzBFAiEA6QZx50AS%2BL%2BCK8A%2Ft1pUOXejKgakV%2F9UQFOjFMd51x0CIE%2FvNORod%2BMY%2FpKrUJnZXxb6tYyOsKPV65DdYYNWpSpVKuQCCDIQABoMOTA1NDE4Mjc0MTYxIgz37jNC8z8p2kBemZoqwQKGWg4i2EFy7Ezygg9rLEQz4sGIcTnGwYDRfdT7YDLDKAuH7aY%2BCG1t9c%2FDDt6LzNJEgWzHddZQNMc5SVqEtuSYACV2XgVUq4dA196WCsIr%2BKRKZ004WmZJ5AyGcqM9GyjL7wQwxXbExwDNtuHMHTWg8OJJ7oze2ts2Dxawr0rvRxRuAPh9S5pAk2VdCNAed9Nu%2FzdUR7I5frB5dO7OXkCO%2FwaddvOamt1Loif3da7O3CQdj%2FL4zreRltDidtwUj2Dbe7r%2FUv%2Fi3MNEblI7PUBPXL97feXOupGiGT%2Fb%2BO79qI96FTb3uHvuTyn39TeMkqAE9GAGsFFWgcDz1NPfZKrSBoOfW4l1%2FOizkB6JdFXyN2L6Fis%2B3%2FnLjOHAeB4rRGIe3RTASmqksyZrcgnPlHvVBtXNbGF537XSAR2rW9m8w9Mw3MbxrwY6swK%2Bi3EeNu%2BhBPNvS0mxDBOZaMAL7xjjYT0V7iUvF0EzkZqW8xV8BPf1kt7IyCOORbBrNWWwFcj2dPr4bcQnrpUVM8320Pw6nNvnK9nK1uebKAl0FHRIM%2FKS0lguj%2Fdm%2FmoNeor9zqGGQauLbe24O3zwUx1pVGxwnzjwsRX5qNR68984z5%2F54bH1dkL9MS9Ez0lpcgWq3APKVoapkpNqLBJ5vIv455vBp5Kqezja3%2BuJJmsGLa%2BUmjejaslDqbTJ4ZD%2BHCGySDb4Y%2BoxDbQmonQfulSdqziWnZ1m3hrMY9eNf1kfQyPY8hwLMmcTSOC4YRf9W2f9%2Fut8hArDPwjb96INim61ZluT4FxLzlfpz%2FW%2BJlGSE6d4UfQMOVPKbKXePnaxrFoLQmKB9D1fHF5W6g0KGmJF&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240321T165332Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIA5FTZCOVYY4HGKXFC%2F20240321%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=181d7d564d2d9d74e841e363c6c337f4f16daefd2fe866abfb16ba1b4e0413f0";
   console.log("image path", imagePath);
   let tableRows = "";
   bill.items.map((data) => {
