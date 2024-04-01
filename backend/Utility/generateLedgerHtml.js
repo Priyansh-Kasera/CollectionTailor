@@ -1,8 +1,10 @@
 const fs = require("fs");
 const getDatefromUTC = require("./timeUtility");
+const path = require("path");
 
 exports.generateLedgerHtml = (user, bills, party, startDate, endDate) => {
   console.log("USER", user);
+  let imagePath = path.join(__dirname, "Images/logo11C.png");
   function formatDate(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -144,6 +146,9 @@ align-items: end;
 </head>
 <body>
   <div class="header">
+  <img src="data:image/png;base64,${fs
+    .readFileSync(imagePath)
+    .toString("base64")}" alt="alt text" width="300" class="logo" />
       <h1 class="headerText">LEDGER</h1>
   </div>
 
