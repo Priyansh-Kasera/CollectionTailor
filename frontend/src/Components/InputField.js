@@ -11,6 +11,7 @@ const InputField = ({
   type = "text",
   errorMessage = "",
   required = false,
+  rightComponent: RightComponent,
 }) => {
   return (
     <div className={cn(className, "relative w-full flex flex-col gap-1")}>
@@ -23,16 +24,20 @@ const InputField = ({
           {label} {required ? <span className="text-red-500">*</span> : null}
         </label>
       ) : null}
-      <input
-        id={id}
-        type={type}
-        {...register}
-        className={cn(
-          "w-full py-2 focus:outline-none bg-transparent border-b  hover:placeholder:text-gray-600 focus:placeholder:text-gray-600",
-          error ? "border-red-500" : "border-black"
-        )}
-        placeholder={placeholder || "Enter value"}
-      />
+      <div className="w-full  bg-transparent border-b flex flex-row items-center">
+        <input
+          id={id}
+          type={type}
+          {...register}
+          className={cn(
+            "flex-1 focus:outline-none py-2 bg-transparent hover:placeholder:text-gray-600 focus:placeholder:text-gray-600",
+            error ? "border-red-500" : "border-black"
+          )}
+          placeholder={placeholder || "Enter value"}
+        />
+        {RightComponent ? <RightComponent /> : null}
+      </div>
+
       {error ? (
         <p className="text-red-500 font-medium">{errorMessage}</p>
       ) : null}

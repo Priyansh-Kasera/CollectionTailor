@@ -5,7 +5,11 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const ApiFeature = require("../Utility/apiFeature");
 const generatePdf = require("../Utility/generatePdf");
 const decryptToken = require("../Utility/decryptJwtToken");
-const { addAmount, updateAmount } = require("../Utility/addPartyAmount");
+const {
+  addAmount,
+  updateAmount,
+  removePayment,
+} = require("../Utility/addPartyAmount");
 exports.createBill = catchAsyncError(async (req, res, next) => {
   if (req.body._id) {
     const bill = await Bill.findById({ _id: req.body._id });
@@ -79,6 +83,9 @@ exports.deleteBill = catchAsyncError(async (req, res, next) => {
   if (!bill) {
     return next(new ErrorHandler(404, "bill not found"));
   }
+
+  await removePayment(bill.customerId, bill.amount);
+
   await Bill.findByIdAndDelete(req.body.id);
   return res.status(200).json({
     success: true,

@@ -34,7 +34,7 @@ exports.findById = catchAsyncError(async (req, res, next) => {
 });
 
 exports.addParty = catchAsyncError(async (req, res, next) => {
-  const { partyName, mobileNo, address, id } = req.body;
+  const { partyName, mobileNo, address, id, amount, openingBalance } = req.body;
   const party = await Party.findById(id);
   if (party) {
     const updatedParty = await Party.findByIdAndUpdate(id, req.body, {
@@ -47,7 +47,13 @@ exports.addParty = catchAsyncError(async (req, res, next) => {
       data: updatedParty,
     });
   } else {
-    const createdParty = await Party.create({ partyName, mobileNo, address });
+    const createdParty = await Party.create({
+      partyName,
+      mobileNo,
+      address,
+      amount,
+      openingBalance,
+    });
     res.status(200).json({
       success: true,
       data: createdParty,

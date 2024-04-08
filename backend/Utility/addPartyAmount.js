@@ -15,6 +15,16 @@ exports.addAmount = async (billAmount, partyId, status, isPayment) => {
   }
 };
 
+exports.removePayment = async (partyId, billAmtDel) => {
+  const party = await Party.findById({ _id: partyId });
+  if (party) {
+    let amount = party?.amount;
+    amount -= billAmtDel;
+    party.amount = amount;
+    updatedParty = await Party?.findByIdAndUpdate({ _id: partyId }, party);
+  }
+};
+
 exports.updateAmount = async (oldAmount, newAmount, partyId, status) => {
   const party = await Party.findById({ _id: partyId });
   if (party) {

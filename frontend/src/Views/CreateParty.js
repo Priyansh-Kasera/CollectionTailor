@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import Heading from "../Components/Heading";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import { cn } from "../Utility/helper";
 
 const CreateParty = () => {
   const form = useForm({
@@ -20,6 +22,7 @@ const CreateParty = () => {
   const { id } = useParams();
   const { register, handleSubmit, formState, setValue } = form;
   const { errors } = formState;
+  const [dueType, setDueType] = useState("cr");
 
   const onSubmit = (values) => {
     const { partyName, mobileNumber, openingAmount } = values;
@@ -29,6 +32,11 @@ const CreateParty = () => {
       mobileNo: mobileNumber,
       address: null,
       amount: openingAmount || 0,
+      openingBalance: openingAmount
+        ? dueType === "cr"
+          ? openingAmount
+          : 0 - openingAmount
+        : 0,
     };
     const url = "/party";
 
@@ -51,6 +59,39 @@ const CreateParty = () => {
     } else {
       toast.error(res.message);
     }
+  };
+
+  const setDr = () => {
+    setDueType("dr");
+  };
+  const setCr = () => {
+    setDueType("cr");
+  };
+
+  const DueType = () => {
+    return (
+      <div className="flex flex-row gap-2 lg:gap-4 items-center">
+        <div
+          className={cn(
+            "p-1 px-2 rounded-sm border border-slate cursor-pointer",
+            dueType === "cr" ? "bg-slate" : ""
+          )}
+          onClick={setCr}
+        >
+          <p className="text-black font-medium">CR</p>
+        </div>
+
+        <div
+          className={cn(
+            "p-1 px-2 rounded-sm border border-slate cursor-pointer",
+            dueType === "dr" ? "bg-slate" : ""
+          )}
+          onClick={setDr}
+        >
+          <p className="text-black font-medium">DR</p>
+        </div>
+      </div>
+    );
   };
   return (
     <Layout>
@@ -98,6 +139,7 @@ const CreateParty = () => {
             error={errors.openingAmount}
             errorMessage={errors?.openingAmount?.message}
             register={register("openingAmount")}
+            rightComponent={DueType}
           />
 
           <AppButton

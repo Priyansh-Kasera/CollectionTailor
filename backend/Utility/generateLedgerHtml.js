@@ -14,9 +14,10 @@ exports.generateLedgerHtml = (user, bills, party, startDate, endDate) => {
   }
 
   function getFinalAmount(data) {
-    return data?.payment
+    let amt = data?.payment
       ? (data?.lastBalance || 0) - (data?.amount || 0)
       : (data?.lastBalance || 0) + (data?.amount || 0);
+    return Math.abs(amt);
   }
 
   let total = 0;
@@ -164,7 +165,7 @@ align-items: end;
       </div>
       <div class="billInfo">
           <p class="boldText">Opening Balance ${
-            bills?.[0]?.lastBalance || 0
+            Math.abs(bills?.[0]?.lastBalance) || 0
           }</p>
           <p>From ${getDatefromUTC(startDate)}</p>
           <p>To ${getDatefromUTC(endDate)}</p>

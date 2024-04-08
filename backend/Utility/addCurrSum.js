@@ -1,10 +1,11 @@
 const Bills = require("../Models/billModel");
-
+const Party = require("../Models/partyModel");
 exports.findStartingBalance = async (req, resultPerPage) => {
   let startDate = new Date(req?.body?.startDate);
   let endDate = new Date(req?.body?.endDate);
   startDate = startDate.setHours(0, 0, 0, 0);
   endDate = endDate.setHours(23, 59, 59, 59);
+  const party = await Party.findById({ _id: req.body.partyId });
   let billsBefore = await Bills.find({
     customerId: req?.body?.partyId,
     date: {
@@ -12,6 +13,7 @@ exports.findStartingBalance = async (req, resultPerPage) => {
     },
   });
   let balance = 0;
+  balance += party.openingBalance;
   billsBefore?.map((bill) => {
     if (bill?.payment) {
       balance -= bill?.amount || 0;

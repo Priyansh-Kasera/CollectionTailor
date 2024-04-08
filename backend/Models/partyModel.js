@@ -13,6 +13,10 @@ const party = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  openingBalance: {
+    type: Number,
+    default: 0,
+  },
   address: {
     city: {
       type: String,
