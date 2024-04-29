@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import Heading from "../Components/Heading";
+import moment from "moment";
 
 const CreateBill = () => {
   const { id } = useParams();
@@ -24,6 +25,7 @@ const CreateBill = () => {
   const [defaultValues, setDefaultValues] = useState({
     partyName: "",
     partyId: null,
+    date: moment(new Date()).format("YYYY-MM-DD"),
     challanNumber: null,
     lrNumber: null,
     orderNumber: null,
@@ -53,6 +55,7 @@ const CreateBill = () => {
         throughBy: bill.throughBy,
         address: bill.address,
         products: bill.items,
+        date: moment(bill.date).format("YYYY-MM-DD"),
       });
     } else {
       toast.error("Oops! something wrong happend.");
@@ -85,6 +88,7 @@ const CreateBill = () => {
       orderNumber,
       throughBy,
       products,
+      date,
     } = value;
     const data = {
       _id: id,
@@ -97,6 +101,7 @@ const CreateBill = () => {
       throughBy: throughBy,
       amount: findAmount(products),
       items: products,
+      date: date,
     };
     makeRequest("/bill/create", "POST", data, createBillCB);
   };
@@ -139,6 +144,17 @@ const CreateBill = () => {
             type="number"
           />
 
+          <InputField
+            label={"Date"}
+            id={"date"}
+            register={register("date", {
+              required: "date is required",
+            })}
+            error={errors.date}
+            errorMessage={errors.date?.message}
+            type="date"
+          />
+
           <div className="w-full flex flex-row  gap-5">
             <div className="flex-1">
               <InputField
@@ -148,7 +164,7 @@ const CreateBill = () => {
                 register={register("address.city")}
               />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 ">
               <InputField
                 label={"State"}
                 placeholder={"State name"}

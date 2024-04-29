@@ -22,7 +22,7 @@ const CreateParty = () => {
   const { id } = useParams();
   const { register, handleSubmit, formState, setValue } = form;
   const { errors } = formState;
-  const [dueType, setDueType] = useState("cr");
+  const [dueType, setDueType] = useState("dr");
 
   const onSubmit = (values) => {
     const { partyName, mobileNumber, openingAmount } = values;
@@ -33,7 +33,7 @@ const CreateParty = () => {
       address: null,
       amount: openingAmount || 0,
       openingBalance: openingAmount
-        ? dueType === "cr"
+        ? dueType === "dr"
           ? openingAmount
           : 0 - openingAmount
         : 0,
@@ -74,21 +74,21 @@ const CreateParty = () => {
         <div
           className={cn(
             "p-1 px-2 rounded-sm border border-slate cursor-pointer",
-            dueType === "cr" ? "bg-slate" : ""
-          )}
-          onClick={setCr}
-        >
-          <p className="text-black font-medium">CR</p>
-        </div>
-
-        <div
-          className={cn(
-            "p-1 px-2 rounded-sm border border-slate cursor-pointer",
             dueType === "dr" ? "bg-slate" : ""
           )}
           onClick={setDr}
         >
           <p className="text-black font-medium">DR</p>
+        </div>
+
+        <div
+          className={cn(
+            "p-1 px-2 rounded-sm border border-slate cursor-pointer",
+            dueType === "cr" ? "bg-slate" : ""
+          )}
+          onClick={setCr}
+        >
+          <p className="text-black font-medium">CR</p>
         </div>
       </div>
     );

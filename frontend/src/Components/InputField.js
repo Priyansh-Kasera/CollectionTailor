@@ -30,7 +30,7 @@ const InputField = ({
           type={type}
           {...register}
           className={cn(
-            "flex-1 focus:outline-none py-2 bg-transparent hover:placeholder:text-gray-600 focus:placeholder:text-gray-600",
+            "flex-1 focus:outline-none py-2 bg-transparent w-full hover:placeholder:text-gray-600 focus:placeholder:text-gray-600",
             error ? "border-red-500" : "border-black"
           )}
           placeholder={placeholder || "Enter value"}
