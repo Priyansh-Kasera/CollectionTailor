@@ -26,6 +26,7 @@ const CreateBill = () => {
     partyName: "",
     partyId: null,
     date: moment(new Date()).format("YYYY-MM-DD"),
+    invoiceNo: null,
     challanNumber: null,
     lrNumber: null,
     orderNumber: null,
@@ -56,6 +57,7 @@ const CreateBill = () => {
         address: bill.address,
         products: bill.items,
         date: moment(bill.date).format("YYYY-MM-DD"),
+        invoiceNo: bill.invoiceNo,
       });
     } else {
       toast.error("Oops! something wrong happend.");
@@ -89,10 +91,12 @@ const CreateBill = () => {
       throughBy,
       products,
       date,
+      invoiceNo,
     } = value;
     const data = {
       _id: id,
       customerName: partyName,
+      invoiceNo: invoiceNo,
       customerId: partyId,
       challanNo: challanNumber,
       lrNo: lrNumber,
@@ -130,6 +134,18 @@ const CreateBill = () => {
             setValue={setValue}
             error={errors.partyName}
             errorMessage={errors.partyName?.message}
+          />
+          <InputField
+            label={"Invoice Number"}
+            required={true}
+            placeholder={"Enter invoice number"}
+            id={"invoiceNumber"}
+            register={register("invoiceNo", {
+              required: "Invoice Number is required",
+            })}
+            error={errors.challanNumber}
+            errorMessage={errors.challanNumber?.message}
+            type="number"
           />
           <InputField
             label={"Challan Number"}

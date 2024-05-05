@@ -197,7 +197,7 @@ exports.generatehtml = (bill, user) => {
             </div>
             <div class="footerName">
                 <h2 style="margin : 3px;">Collection Tailor</h2>
-                <p>Mob No: ${user?.mobileNumber || 7239857149}, 8947973470</p>
+                <p>Mob No: ${user?.mobileNumber || 7239857149}, 8619026424</p>
                 <p>Hirapanna Market, Sindhi Bazar, Udaipur</p>
             </div>
         </div>
