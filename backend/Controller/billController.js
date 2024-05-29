@@ -20,7 +20,7 @@ exports.createBill = catchAsyncError(async (req, res, next) => {
       bill?.amount,
       req?.body?.amount,
       req?.body?.customerId,
-      req?.body?.status
+      req?.body?.payment
     );
     const updatedBill = await Bill.findByIdAndUpdate(req.body._id, req.body, {
       new: true,
@@ -78,13 +78,12 @@ exports.findBill = catchAsyncError(async (req, res, next) => {
 });
 
 exports.deleteBill = catchAsyncError(async (req, res, next) => {
-  console.log("id", req.body.id);
   const bill = await Bill.findById(req.body.id);
   if (!bill) {
     return next(new ErrorHandler(404, "bill not found"));
   }
 
-  await removePayment(bill.customerId, bill.amount);
+  await removePayment(bill.customerId, bill.amount, bill.payment);
 
   await Bill.findByIdAndDelete(req.body.id);
   return res.status(200).json({
@@ -139,7 +138,6 @@ exports.findBillByDate = catchAsyncError(async (req, res, next) => {
       $lt: endDate,
     },
   });
-  console.log(bills.length);
   res.status(200).json({
     success: true,
     data: bills,
@@ -196,14 +194,11 @@ exports.createPdf = catchAsyncError(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler(401, "User not found"));
   }
-  console.log("bill id", req.query);
   const bill = await Bill.findById({ _id: req.query.id });
   if (!bill) {
     return next(new ErrorHandler(404, "Bill data not found"));
   }
-  console.log("generating pdf", bill);
   const url = await generatePdf(bill, user);
-  console.log("url", url);
   res.setHeader("Content-Type", "application/pdf");
   res.send(url);
 });

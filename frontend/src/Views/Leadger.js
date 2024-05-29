@@ -111,7 +111,10 @@ const Leadger = () => {
               }
             };
             return (
-              <Card key={index} to={tran.payment ? "" : `/bill/${tran._id}`}>
+              <Card
+                key={index}
+                to={tran.payment ? `/payment/${tran._id}` : `/bill/${tran._id}`}
+              >
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-row justify-between">
                     <h1 className="text-primary">{tran.customerName}</h1>

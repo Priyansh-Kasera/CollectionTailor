@@ -65,7 +65,7 @@ const PartySearchBar = ({ onPartySelect }) => {
       {showDropDown ? (
         <div
           id="dropdown"
-          className="absolute w-full p-2 top-full mt-2 z-10 flex flex-col gap-1 rounded-lg max-h-50 overflow-scroll"
+          className="absolute w-full p-2 top-full mt-2 z-10 flex flex-col gap-1 rounded-lg max-h-60 overflow-scroll"
           style={{ backgroundColor: COLORS.cardBg, scrollbarWidth: "none" }}
         >
           {searchedParty.length ? (

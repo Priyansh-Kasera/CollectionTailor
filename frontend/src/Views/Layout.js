@@ -9,19 +9,6 @@ import { makeRequest } from "../service/apiconfig";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 const Layout = ({ children, check = true }) => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    // is user logged in
-    if (check) {
-      makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB);
-    }
-  }, []);
-
-  const isUserLoggedInCB = (result) => {
-    if (!result?.success) {
-      navigate("/sign-in");
-    }
-  };
   return (
     <div
       className="relative min-h-screen flex flex-col"

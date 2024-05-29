@@ -20,10 +20,13 @@ const Header = () => {
   ];
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const url = window.location.pathname;
   const navigate = useNavigate();
 
   useEffect(() => {
-    makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB, true);
+    if (url !== "/") {
+      makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB, true);
+    }
   }, []);
 
   const isUserLoggedInCB = (result) => {
@@ -31,6 +34,7 @@ const Header = () => {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
+      navigate("/sign-in");
     }
   };
 

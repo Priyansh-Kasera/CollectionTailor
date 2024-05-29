@@ -24,6 +24,7 @@ const Home = () => {
         <Route path="/party/:id" element={<CreateParty />} />
         <Route path="/party/create" element={<CreateParty />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/payment/:id" element={<Payment />} />
         <Route path="/bill/create" element={<CreateBill />} />
         <Route path="/bill/update/:id" element={<CreateBill />} />
         <Route path="/bill/:id" element={<BillDetails />} />

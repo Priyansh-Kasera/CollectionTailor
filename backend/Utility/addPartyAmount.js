@@ -2,7 +2,6 @@ const Party = require("../Models/partyModel");
 
 exports.addAmount = async (billAmount, partyId, status, isPayment) => {
   const party = await Party.findById({ _id: partyId });
-  console.log("status ", status, "isPayment ", isPayment);
   if (party) {
     let amount = party?.amount;
     if (isPayment) {
@@ -15,24 +14,33 @@ exports.addAmount = async (billAmount, partyId, status, isPayment) => {
   }
 };
 
-exports.removePayment = async (partyId, billAmtDel) => {
+exports.removePayment = async (partyId, billAmtDel, isPayment) => {
   const party = await Party.findById({ _id: partyId });
   if (party) {
     let amount = party?.amount;
-    amount -= billAmtDel;
+    if (isPayment) {
+      amount += billAmtDel;
+    } else {
+      amount -= billAmtDel;
+    }
     party.amount = amount;
     updatedParty = await Party?.findByIdAndUpdate({ _id: partyId }, party);
   }
 };
 
-exports.updateAmount = async (oldAmount, newAmount, partyId, status) => {
+exports.updateAmount = async (oldAmount, newAmount, partyId, isPayment) => {
   const party = await Party.findById({ _id: partyId });
   if (party) {
     let amount = party?.amount;
 
     let sum = 0;
-    sum -= oldAmount;
-    sum += newAmount;
+    if (isPayment) {
+      sum += oldAmount;
+      sum -= newAmount;
+    } else {
+      sum -= oldAmount;
+      sum += newAmount;
+    }
 
     amount += sum;
 
