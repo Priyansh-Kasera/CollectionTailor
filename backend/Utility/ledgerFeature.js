@@ -34,7 +34,7 @@ class LedgerFeature {
         $lte: new Date(endDate),
       },
     };
-    this.query.find(filter);
+    this.query.find(filter).sort({ date: 1 });
     return this;
   }
 
