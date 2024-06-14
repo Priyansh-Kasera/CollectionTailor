@@ -28,7 +28,7 @@ exports.generateLedgerHtml = (user, bills, party, startDate, endDate) => {
         <tr>
             <td>${formatDate(new Date(data?.date))}</td>
             <td>${data?.invoiceNo === -1 ? "" : data?.invoiceNo || 0}</td>
-            <td>${data?.payment ? "PAYMENT" : "PURCHASE"}</td>
+            <td>${data?.payment ? "RECEIPT" : "SALE"}</td>
             ${
               data?.payment
                 ? `<td></td>
