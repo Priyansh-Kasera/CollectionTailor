@@ -17,6 +17,7 @@ const Payment = () => {
       partyName: "",
       partyId: "",
       amount: "",
+      remark: "",
       invoiceNumber: "",
       date: moment(new Date()).format("YYYY-MM-DD"),
     },
@@ -40,13 +41,14 @@ const Payment = () => {
       setValue("amount", bill.amount);
       setValue("invoiceNo", bill.invoiceNo);
       setValue("date", moment(bill.date).format("YYYY-MM-DD"));
+      setValue("remark", bill.remark);
     } else {
       toast.error("Oops! something wrong happend.");
     }
   };
 
   const makePayment = (value) => {
-    const { partyName, partyId, amount, invoiceNumber, date } = value;
+    const { partyName, partyId, amount, invoiceNumber, date, remark } = value;
     const data = {
       _id: id,
       payment: true,
@@ -55,6 +57,7 @@ const Payment = () => {
       customerName: partyName,
       customerId: partyId,
       date: date,
+      remark: remark,
     };
     makeRequest("/bill/create", "POST", data, makePaymentCB);
   };
@@ -130,6 +133,14 @@ const Payment = () => {
             error={errors.date}
             errorMessage={errors.date?.message}
             type="date"
+          />
+          <InputField
+            label={"Remark"}
+            register={register("remark")}
+            placeholder={"Enter remark"}
+            id="remark"
+            error={errors.remark}
+            errorMessage={errors.remark?.message}
           />
           <InputField
             label={"Invoice No (Optional)"}

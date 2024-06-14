@@ -48,6 +48,9 @@ const Bill = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  remark: {
+    type: String,
+  },
   items: [
     {
       name: {

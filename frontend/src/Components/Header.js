@@ -24,7 +24,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (url !== "/") {
+    if (url !== "/" && url !== "/user/password/forgot") {
       makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB, true);
     }
   }, []);
