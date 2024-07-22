@@ -6,12 +6,10 @@ class ApiFeature {
   search() {
     const keyword = this.qureyStr.keyword
       ? {
-          customerName: {
-            $regex: this.qureyStr.keyword,
-            $options: "i",
-          },
+          customerId: this.qureyStr.keyword,
         }
       : {};
+    console.log("keyword", this.qureyStr.keyword);
     this.query = this.query.find({ ...keyword });
     return this;
   }
@@ -22,13 +20,13 @@ class ApiFeature {
     removedfields.forEach((key) => delete queryCopy[key]);
     let queryString = { payment: { $ne: true } };
     //date filter
-    if (queryCopy.date) {
-      console.log("in the loop", queryCopy.date);
-      const targetDate = new Date(queryCopy.date);
-      console.log("target date", targetDate);
-      const startDate = new Date(targetDate);
+    if (queryCopy.startDate && queryCopy.endDate) {
+      const targetStartDate = new Date(queryCopy.startDate);
+      const targetEndDate = new Date(queryCopy.endDate);
+
+      const startDate = new Date(targetStartDate);
       startDate.setHours(0, 0, 0, 0);
-      const endDate = new Date(targetDate);
+      const endDate = new Date(targetEndDate);
       endDate.setHours(23, 59, 59, 999);
 
       queryString = {

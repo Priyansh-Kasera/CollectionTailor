@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import Layout from "./Layout";
-import { COLORS } from "../assets/colors";
 import InputField from "../Components/InputField";
 import AppButton from "../Components/AppButton";
 import { makeRequest } from "../service/apiconfig";
@@ -31,7 +30,11 @@ const CreateParty = () => {
       partyName,
       mobileNo: mobileNumber,
       address: null,
-      amount: openingAmount || 0,
+      amount: openingAmount
+        ? dueType === "dr"
+          ? openingAmount
+          : 0 - openingAmount
+        : 0,
       openingBalance: openingAmount
         ? dueType === "dr"
           ? openingAmount
@@ -51,7 +54,7 @@ const CreateParty = () => {
   const getPartyDataCB = (res) => {
     setValue("partyName", res?.data?.partyName || "");
     setValue("mobileNumber", res?.data?.mobileNo || "");
-    setValue("openingAmount", res?.data?.amount);
+    setValue("openingAmount", res?.data?.openingBalance);
   };
   const createPartyCB = (res) => {
     if (res.success) {

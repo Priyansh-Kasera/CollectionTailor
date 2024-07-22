@@ -3,7 +3,6 @@ import { makeRequest } from "../service/apiconfig";
 import { useState } from "react";
 import Card from "../Components/Card";
 import Layout from "./Layout";
-import { getColor } from "../Utility/helper";
 import AppButton from "../Components/AppButton";
 import { Link } from "react-router-dom";
 import SearchBar from "../Components/SearchBar";

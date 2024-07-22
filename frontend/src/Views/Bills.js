@@ -11,18 +11,22 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Pagination from "../Components/Pagination";
 import DateInput from "../Components/DateInput";
 import { useNavigate } from "react-router-dom";
+import PartySearchBar from "../Components/PartySearchBar";
 
 const Bills = () => {
   const [page, setPage] = useState(1);
+  const [totalBills, setTotalBills] = useState(0);
   const [allBills, setAllBills] = useState([]);
-  const [searchedText, setSearchedText] = useState("");
-  const [date, setDate] = useState("");
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [partyId, setPartyId] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [totalNumberOfPages, setTotalNumberOfPages] = useState(10);
   const navigate = useNavigate();
 
   const fetchData = () => {
     makeRequest(
-      `/bill/showAll?page=${page}&keyword=${searchedText}&date=${date}`,
+      `/bill/showAll?page=${page}&keyword=${partyId}&startDate=${startDate}&endDate=${endDate}`,
       "GET",
       null,
       getAllBillsCB
@@ -30,24 +34,33 @@ const Bills = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [page, searchedText, date]);
+  }, [page, partyId, startDate, endDate]);
 
   const getAllBillsCB = (res) => {
     if (res.success) {
       setAllBills(res.bills);
+      setTotalBills(res.totalBills);
+      setTotalAmount(res.totalAmount);
       const noOfPage = Math.ceil(res.totalBills / res.paginationCount);
       setTotalNumberOfPages(noOfPage);
     } else toast.error("Can't load bills.");
   };
 
-  const handleSearch = (text) => {
+  const handleSearch = (partyData) => {
     setPage(1);
-    setSearchedText(text);
+    //console.log(partyData._id, "IDD");
+    setPartyId(partyData._id);
+    //setSearchedText(text);
   };
 
-  const handleDateChange = (date) => {
+  const handleStartDateChange = (date) => {
     setPage(1);
-    setDate(String(date));
+    setStartDate(String(date));
+  };
+
+  const handleEndDateChange = (date) => {
+    setPage(1);
+    setEndDate(String(date));
   };
 
   const deleteBillCB = (res) => {
@@ -61,11 +74,28 @@ const Bills = () => {
 
   return (
     <Layout>
-      <div className="flex flex-1 flex-col md:flex-row gap-6">
-        <SearchBar onTextChage={handleSearch} />
-        <DateInput value={date} onChange={handleDateChange} />
+      <div className="flex flex-1 flex-col gap-6">
+        <PartySearchBar onPartySelect={handleSearch} />
+        <div className="flex justify-between">
+          <div>
+            <p className="mb-1 text-xs md:text-base">From date</p>
+            <DateInput value={startDate} onChange={handleStartDateChange} />
+          </div>
+          <div>
+            <p className="mb-1 w-full text-end text-xs md:text-base">To date</p>
+            <DateInput value={endDate} onChange={handleEndDateChange} />
+          </div>
+        </div>
       </div>
-      <div className="flex flex-col gap-4 mt-12 min-h-96">
+      <div className="flex justify-between">
+        <p className="text-slate text-xs md:text-base mt-6 font-bold">
+          Total results : {totalBills}
+        </p>
+        <p className="text-slate text-xs md:text-base mt-6 font-bold">
+          Total Amount : {totalAmount}
+        </p>
+      </div>
+      <div className="flex flex-col gap-4 mt-6 min-h-96">
         {allBills.length ? (
           allBills.map((bill, index) => {
             const editBill = (event) => {

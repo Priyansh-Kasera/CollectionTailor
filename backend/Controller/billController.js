@@ -10,12 +10,15 @@ const {
   updateAmount,
   removePayment,
 } = require("../Utility/addPartyAmount");
+const generateStatementPdfUrl = require("../Utility/generateStatementPdfUrl");
+
 exports.createBill = catchAsyncError(async (req, res, next) => {
   if (req.body._id) {
     const bill = await Bill.findById({ _id: req.body._id });
     if (!bill) {
       return next(new ErrorHandler(404, "user not found"));
     }
+    console.log("find th bill", req.body._id);
     updateAmount(
       bill?.amount,
       req?.body?.amount,
@@ -52,6 +55,12 @@ exports.getAllBill = catchAsyncError(async (req, res, next) => {
   const resultPerPage = process.env.PAGINATION_COUNT;
   const billCount = new ApiFeature(Bill.find(), req.query).search().filter();
   const totalBills = await billCount.query;
+
+  const totalAmount = totalBills.reduce((amount, bill) => {
+    console.log(bill);
+    return (amount = amount + (bill.amount || 0));
+  }, 0);
+  console.log("TotalAmount", totalAmount);
   const apiFeature = new ApiFeature(Bill.find(), req.query)
     .search()
     .filter()
@@ -62,6 +71,7 @@ exports.getAllBill = catchAsyncError(async (req, res, next) => {
     success: true,
     bills: bills,
     totalBills: totalBills.length,
+    totalAmount: totalAmount,
     paginationCount: resultPerPage,
   });
 });
@@ -154,6 +164,81 @@ exports.findBillByInvoice = catchAsyncError(async (req, res, next) => {
     success: true,
     data: bill,
   });
+});
+
+exports.getStatements = catchAsyncError(async (req, res, next) => {
+  const { startDate, endDate } = req.body;
+  const { partyId } = req.query;
+  if (!startDate || !endDate) {
+    return next(new ErrorHandler(200, "start date or end date missing."));
+  }
+  let sDate = new Date(startDate);
+  sDate = sDate.setHours(0, 0, 0, 0);
+  let eDate = new Date(endDate);
+  eDate = eDate.setHours(23, 59, 59, 999);
+  let filter = {};
+  if (partyId) {
+    filter = {
+      date: {
+        $gte: new Date(sDate),
+        $lte: new Date(eDate),
+      },
+      customerId: partyId,
+    };
+  } else {
+    filter = {
+      date: {
+        $gte: new Date(sDate),
+        $lte: new Date(eDate),
+      },
+    };
+  }
+  const allBills = await Bill.find(filter).sort({ date: 1 });
+  return res.status(200).json({
+    success: true,
+    bills: allBills,
+  });
+});
+
+exports.generateStatementPdf = catchAsyncError(async (req, res, next) => {
+  const { startDate, endDate } = req.body;
+  const { partyId } = req.query;
+  if (!startDate || !endDate) {
+    return next(new ErrorHandler(200, "start date or end date not found."));
+  }
+  const token = req.cookies.token;
+  if (token === "j:null") {
+    return next(new ErrorHandler(401, "Login Required"));
+  }
+  const userInfo = decryptToken(token);
+  let sDate = new Date(startDate);
+  sDate = sDate.setHours(0, 0, 0, 0);
+  let eDate = new Date(endDate);
+  eDate = eDate.setHours(23, 59, 59, 999);
+  const user = await User.findById(userInfo.id);
+  let filter = {};
+  if (partyId) {
+    filter = {
+      date: {
+        $gte: new Date(sDate),
+        $lte: new Date(eDate),
+      },
+      customerId: partyId,
+    };
+  } else {
+    filter = {
+      date: {
+        $gte: new Date(sDate),
+        $lte: new Date(eDate),
+      },
+    };
+  }
+  const allBills = await Bill.find(filter).sort({ date: 1 });
+  const url = await generateStatementPdfUrl(allBills, user, startDate, endDate);
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "inline; filename=generated.pdf");
+
+  res.send(url);
 });
 
 exports.chageBillStatus = catchAsyncError(async (req, res, next) => {

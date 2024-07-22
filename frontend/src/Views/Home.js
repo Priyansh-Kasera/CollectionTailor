@@ -13,6 +13,7 @@ import Profile from "./Profile";
 import ChangePassword from "./ChangePassword";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
+import Statements from "./Statements";
 
 const Home = () => {
   return (
@@ -34,6 +35,7 @@ const Home = () => {
         <Route path="/user/password/:id" element={<ChangePassword />} />
         <Route path="/user/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />
+        <Route path="/statement" element={<Statements />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Bill = require("../Models/billModel");
 
 const party = new mongoose.Schema({
   partyName: {
@@ -29,6 +30,13 @@ const party = new mongoose.Schema({
       length: [6, "Wrong pin code format"],
     },
   },
+});
+
+party.post("findOneAndDelete", async function (party) {
+  console.log("party", party);
+  if (party._id) {
+    await Bill.deleteMany({ customerId: party._id });
+  }
 });
 
 module.exports = mongoose.model("party", party);

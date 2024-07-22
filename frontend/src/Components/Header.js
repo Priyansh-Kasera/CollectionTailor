@@ -17,6 +17,7 @@ const Header = () => {
     { name: "Party", route: "/party" },
     { name: "Ledger", route: "/ledger" },
     { name: "Payment", route: "/payment" },
+    { name: "Statement", route: "/statement" },
   ];
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,17 +25,21 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (url !== "/" && url !== "/user/password/forgot") {
+    if (url !== "/") {
       makeRequest("/isLoggedIn", "GET", null, isUserLoggedInCB, true);
     }
   }, []);
 
   const isUserLoggedInCB = (result) => {
-    if (result?.success) {
-      setIsLoggedIn(true);
-    } else {
+    try {
+      if (result?.success) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+        navigate("/sign-in");
+      }
+    } catch (err) {
       setIsLoggedIn(false);
-      navigate("/sign-in");
     }
   };
 
@@ -51,7 +56,6 @@ const Header = () => {
   const logOutCB = (res) => {
     if (res.success) {
       toast.success("Logout successfully.");
-      navigate("/");
       setIsLoggedIn(false);
     } else {
       toast.error(res.message);

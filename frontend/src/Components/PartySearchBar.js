@@ -3,7 +3,7 @@ import SearchBar from "./SearchBar";
 import { makeRequest } from "../service/apiconfig";
 import { COLORS } from "../assets/colors";
 
-const PartySearchBar = ({ onPartySelect }) => {
+const PartySearchBar = ({ onPartySelect, removeParty }) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [searchedParty, setSearchedParty] = useState([]);
   const [partyName, setPartyName] = useState("");
@@ -51,6 +51,10 @@ const PartySearchBar = ({ onPartySelect }) => {
   const handleTextChange = (val) => {
     setPartyName(val);
   };
+  const handleRemoveText = () => {
+    setPartyName("");
+    removeParty && removeParty();
+  };
 
   return (
     <div className="w-full relative">
@@ -61,11 +65,12 @@ const PartySearchBar = ({ onPartySelect }) => {
         placeholder={"Enter party Name"}
         onTextChage={handleTextChange}
         value={partyName}
+        removeText={handleRemoveText}
       />
       {showDropDown ? (
         <div
           id="dropdown"
-          className="absolute w-full p-2 top-full mt-2 z-10 flex flex-col gap-1 rounded-lg max-h-60 overflow-scroll"
+          className="absolute w-full p-2 top-full mt-2 z-10 flex flex-col gap-1 rounded-lg max-h-60 overflow-scroll "
           style={{ backgroundColor: COLORS.cardBg, scrollbarWidth: "none" }}
         >
           {searchedParty.length ? (

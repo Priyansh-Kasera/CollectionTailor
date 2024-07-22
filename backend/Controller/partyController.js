@@ -12,10 +12,8 @@ const generateLedgerPdf = require("../Utility/generateLedgerPdf");
 const decryptToken = require("../Utility/decryptJwtToken");
 
 exports.getParties = catchAsyncError(async (req, res, next) => {
-  console.log(req.query);
   const apiFeature = new LedgerFeature(Party.find(), req.query).search();
   const parties = await apiFeature.query;
-  //console.log(parties, "Parties");
   res.status(200).json({
     success: true,
     data: parties,
@@ -37,11 +35,18 @@ exports.addParty = catchAsyncError(async (req, res, next) => {
   const { partyName, mobileNo, address, id, amount, openingBalance } = req.body;
   const party = await Party.findById(id);
   if (party) {
-    const updatedParty = await Party.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-      userFindAndModify: false,
-    });
+    const updatedParty = await Party.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        amount: party.amount - party.openingBalance + Number(openingBalance),
+      },
+      {
+        new: true,
+        runValidators: true,
+        userFindAndModify: false,
+      }
+    );
     res.status(200).json({
       success: true,
       data: updatedParty,
@@ -80,8 +85,7 @@ exports.updateParty = catchAsyncError(async (req, res, next) => {
 
 exports.deleteParty = catchAsyncError(async (req, res, next) => {
   const id = req.body.id;
-  console.log("ID", req.body);
-  const party = await Party.findByIdAndDelete(id);
+  const party = await Party.findByIdAndDelete(id, { returnDocument: "before" });
   if (!party) {
     return next(new ErrorHandler(401, "Party not found"));
   }
@@ -121,7 +125,6 @@ exports.getPartyLedger = catchAsyncError(async (req, res, next) => {
   const startingAmt = await findStartingBalance(req, resultPerPage);
   const fetchAllBills = await partyBillsObject.query;
   fetchAllBills.sort((a, b) => a.date - b.date);
-  console.log("starting amount", startingAmt);
   filteredBills = await addCurrSum(startingAmt, fetchAllBills);
   const data = {
     bills: filteredBills,
@@ -135,7 +138,6 @@ exports.getPartyLedger = catchAsyncError(async (req, res, next) => {
 });
 
 exports.downloadLedgerPdf = catchAsyncError(async (req, res, next) => {
-  console.log(req.body);
   const { bills, startDate, endDate, partyId } = req.body;
   const token = req.cookies.token;
 
@@ -148,9 +150,7 @@ exports.downloadLedgerPdf = catchAsyncError(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler(401, "User not found"));
   }
-  console.log("Party id", partyId);
   const party = await Party.findById({ _id: partyId });
-  console.log(!party, "partyFound");
   if (!party) {
     return next(new ErrorHandler(404, "Party Not found"));
   }
