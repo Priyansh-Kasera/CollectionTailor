@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "./Layout";
-import { makeRequest } from "../service/apiconfig";
+import { createPdfRequest, makeRequest } from "../service/apiconfig";
 import { toast } from "react-toastify";
 import SearchBar from "../Components/SearchBar";
 import Card from "../Components/Card";
@@ -72,6 +72,20 @@ const Bills = () => {
     }
   };
 
+    const generatePdf = (id) => {
+      createPdfRequest(`/bill/generatePdf?id=${id}`, "GET", null, generatePdfCB);
+    };
+    const generatePdfCB = (res) => {
+      const url = URL.createObjectURL(res);
+      const aElement = document.createElement("a");
+      aElement.href = url;
+      aElement.download = `bill_${Math.floor(Math.random()*9999)}.pdf`;
+      document.body.appendChild(aElement);
+      aElement.click();
+      document.body.removeChild(aElement);
+      URL.revokeObjectURL(url);
+    };
+
   return (
     <Layout>
       <div className="flex flex-1 flex-col gap-6">
@@ -111,6 +125,11 @@ const Bills = () => {
               event.preventDefault();
             };
 
+            const downloadBill = (event) => {
+              generatePdf(bill._id)
+              event.preventDefault();
+            };
+
             return (
               <Card to={bill._id} key={index}>
                 <div className="w-full relative flex flex-col">
@@ -136,18 +155,24 @@ const Bills = () => {
                     </h1>
                     <h1 className="text-normal">Amount: {bill.amount || 0}</h1>
                   </div>
-                  <div className="flex flex-row gap-12 mt-5">
+                  <div className="flex flex-row gap-2 sm:gap-6 lg:gap-12 mt-5">
                     <h1
-                      className="box-border uppercase text-sm lg:text-base text-red-500 font-medium border-b-2  border-background hover:border-red-500"
+                      className="box-border uppercase text-xs sm:text-sm lg:text-base text-red-500 font-medium border-b-2  border-background hover:border-red-500"
                       onClick={deleteBill}
                     >
                       Delete
                     </h1>
                     <h1
-                      className="uppercase text-green-700 text-sm lg:text-base font-medium border-b-2  border-background hover:border-green-700"
+                      className="uppercase text-green-700 text-xs sm:text-sm lg:text-base font-medium border-b-2  border-background hover:border-green-700"
                       onClick={editBill}
                     >
                       Edit
+                    </h1>
+                    <h1
+                      className="uppercase text-slate text-xs sm:text-sm lg:text-base font-medium border-b-2  border-background hover:border-slate"
+                      onClick={downloadBill}
+                    >
+                      Download
                     </h1>
                   </div>
                 </div>
